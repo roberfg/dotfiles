@@ -21,7 +21,7 @@ Dotfiles gestionados con [GNU Stow](https://www.gnu.org/software/stow/) mediante
     └── .config/
         ├── VSCodium/            # VSCodium (User/settings.json)
         ├── nvim/                # Neovim (init.lua + lua/)
-        ├── opencode/            # opencode (AGENTS.md, skills)
+        ├── opencode/            # opencode (AGENTS.md, opencode.jsonc, tui.json, skills/)
         └── wezterm/             # Wezterm (terminal, detección de SO)
 ```
 
@@ -91,7 +91,8 @@ El script detecta el nuevo archivo y crea el symlink automáticamente. **No hace
 
 - `AGENTS.md`: reglas globales (idioma, estilo, español neutro, operaciones de Git).
 - `opencode.jsonc`: configuración del agente y registro de skills.
-- `skills/`: skills personalizados (`synchronize-subtitles`, `generate-api-requests`).
+- `tui.json`: configuración de la interfaz TUI (tema).
+- `skills/`: skills personalizados (`synchronize-subtitles`, `extract-subtitles`, `generate-api-requests`).
 
 Este `AGENTS.md` se sincroniza vía stow a `~/.config/opencode/AGENTS.md` (Linux/WSL) y por el script de Windows a `C:\Users\Roberto\.config\opencode\AGENTS.md`.
 
@@ -100,11 +101,3 @@ Este `AGENTS.md` se sincroniza vía stow a `~/.config/opencode/AGENTS.md` (Linux
 - **Código en inglés**: identificadores, endpoints, mensajes de log, mensajes de commit, nombres de branches y tags.
 - **Documentación y comentarios en español neutro**: sin voseo ni regionalismos. Detalles en `config/.config/opencode/AGENTS.md`.
 - **Operaciones de Git**: el agente NUNCA ejecuta `git add`/`commit`/`push` por iniciativa propia. Solo cuando se le pide explícitamente, y tras mostrar `git status` y `git diff --stat`.
-
-## TODO
-
-- [ ] Keybindings personalizados en Neovim
-- [ ] Más plugins de LSP para lenguajes adicionales
-- [ ] Configuración de tmux
-- [ ] Documentar atajos y temas disponibles
-- [ ] Replicar `wsl-ubuntu.sh` para Bazzite, CachyOS, Nobara, MX Linux (hay stubs vacíos en `~/.runs/`)
