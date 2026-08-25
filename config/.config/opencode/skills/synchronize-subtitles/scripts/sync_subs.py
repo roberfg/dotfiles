@@ -7,7 +7,9 @@ Uso:
 - Detecta automaticamente el video (.mkv/.mp4/.avi/.mov/.m4v) y el .srt.
 - Si hay varios de cualquiera, aborta (asociacion ambigua).
 - Ejecuta ffsubsync con los mismos flags y umbrales que search-subtitles.
-- Renombra el resultado a <basename>.es.srt.
+- Renombra el resultado a <basename>.es.srt. Unica validacion de nombrado:
+  si el nombre del video contiene "2160p" (case-insensitive), el .srt se
+  llama igual que el video (<basename>.srt).
 - Si ffsubsync falla, conserva el .srt original y lo renombra igual.
 """
 from __future__ import annotations
@@ -15,6 +17,7 @@ from __future__ import annotations
 import os
 import re
 import shutil
+import stat
 import subprocess
 import sys
 from pathlib import Path
@@ -26,6 +29,10 @@ if hasattr(sys.stdout, "reconfigure"):
 VIDEO_EXTS = ("mkv", "mp4", "avi", "mov", "m4v")
 SRT_EXT = ".srt"
 ALPHA2 = "es"
+
+# Unica validacion de nombrado: si el nombre del video contiene "2160p"
+# (case-insensitive), el .srt se llama igual que el video (<video>.srt).
+_4K_MARKER = "2160p"
 
 # Mismos umbrales que search-subtitles/scripts/download_subs.py
 _FFSUBSYNC_MIN_SCORE = 1000
@@ -83,6 +90,30 @@ def _resolve_pair(folder: Path) -> tuple[Path | None, Path | None, str | None, s
             "Deja solo el que quieras sincronizar."
         ), "2"
     return videos[0], srts[0], "", "0"
+
+
+def _make_writable(path: Path) -> None:
+    """Quita el atributo de solo lectura para permitir reemplazar el archivo.
+
+    En Windows, os.replace/unlink fallan con PermissionError si el destino
+    es de solo lectura (tipico en .srt bajados de internet).
+    """
+    try:
+        os.chmod(path, stat.S_IREAD | stat.S_IWRITE)
+    except OSError:
+        pass
+
+
+def _target_name(video: Path) -> Path:
+    """Devuelve la ruta destino del .srt final.
+
+    Unica validacion de nombrado: si el nombre del video contiene "2160p"
+    (case-insensitive), el .srt se llama igual que el video (<video>.srt);
+    en cualquier otro caso, <video>.es.srt.
+    """
+    if _4K_MARKER in video.stem.lower():
+        return video.with_suffix(SRT_EXT)
+    return video.with_name(video.stem + f".{ALPHA2}{SRT_EXT}")
 
 
 # ---------------------------------------------------------------------------
@@ -213,6 +244,7 @@ def _run_ffsubsync(video: Path, srt: Path) -> tuple[bool, float, float]:
         )
         return False, offset, score
 
+    _make_writable(srt)
     os.replace(srt_out, srt)
     return True, offset, score
 
@@ -239,7 +271,7 @@ def main() -> int:
     print(f"Video:  {video.name}")
     print(f"SRT:    {srt.name}")
 
-    target = video.with_name(video.stem + f".{ALPHA2}.srt")
+    target = _target_name(video)
     same_as_target = srt.resolve() == target.resolve()
     if target.exists() and not same_as_target:
         print(f"Sobrescribiendo {target.name} (ya existia).")
@@ -264,14 +296,17 @@ def main() -> int:
     # o el sincronizado).
     _read_text_with_fallback(srt)
 
-    # Renombrar a <basename>.es.srt.
+    # Renombrar al destino calculado (<video>.srt si es 2160p, si no
+    # <video>.es.srt).
     if srt.resolve() != target.resolve():
         if target.exists():
+            _make_writable(target)
             try:
                 target.unlink()
             except OSError as e:
                 print(f"ERROR: no se pudo borrar {target.name}: {e}")
                 return 2
+        _make_writable(srt)
         os.replace(srt, target)
 
     print(f"\nOK -> {target.name} ({target.stat().st_size:,} bytes)")

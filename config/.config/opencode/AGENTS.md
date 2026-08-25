@@ -40,7 +40,8 @@ Responde siempre en español (es) salvo que el usuario indique lo contrario.
 - Si aparecen credenciales, tokens o claves en un diff, abortar y notificar (ya cubierto en Restricciones).
 
 ## Skills disponibles
-- `synchronize-subtitles`: re-sincroniza un `.srt` local contra el vídeo de la misma carpeta usando `ffsubsync` y lo renombra a `<video>.es.srt`.
+- `synchronize-subtitles`: re-sincroniza un `.srt` local contra el vídeo de la misma carpeta usando `ffsubsync` y lo renombra a `<video>.es.srt` (o `<video>.srt`, igual que el vídeo, si el nombre del vídeo contiene `2160p`; es la única validación de nombrado).
+- `extract-subtitles`: extrae UNA pista de subtítulos incrustada en el vídeo de la carpeta y la deja como archivo al lado, con prioridad estricta español latino > español neutro > español > inglés; si no hay ninguna elegible, no extrae nada y avisa. Copia directa con ffmpeg (subrip → `.srt`, PGS → `.sup`, ass → `.ass`, webvtt → `.vtt`); nombra `<video>.es.<ext>`/`<video>.en.<ext>` (o `<video>.<ext>` si el nombre contiene `2160p`).
 - `generate-api-requests`: genera ficheros `.requests.http` y colección Bruno desde las rutas de un proyecto.
 - `customize-opencode`: skill **built-in** de opencode para editar o crear su propia configuración (opencode.json, AGENTS.md, skills, plugins, MCP, reglas de permisos). No requiere instalación, ya está disponible.
 
