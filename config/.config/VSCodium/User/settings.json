@@ -6,5 +6,6 @@
     "workbench.iconTheme": "material-icon-theme",
     "telemetry.telemetryLevel": "off",
     "workbench.colorTheme": "Atomize",
-    "workbench.startupEditor": "none"
+    "workbench.startupEditor": "none",
+    "workbench.activityBar.location": "bottom"
 }

@@ -8,7 +8,7 @@ if triple:match('windows') then
     config.initial_cols = 140
     config.initial_rows = 40
     config.font_size = 12
-    config.font = wezterm.font 'Cascadia Code'
+    config.font = wezterm.font 'JetBrainsMono Nerd Font Mono'
 
     wezterm.on('gui-startup', function(cmd)
         local _, _, mux_window = wezterm.mux.spawn_window(cmd or {})
@@ -24,26 +24,22 @@ if triple:match('windows') then
         return mux_window
     end)
 elseif triple:match('darwin') then
-    -- macOS: zsh como shell de login
     config.default_prog = { 'zsh', '-l' }
     config.font_size = 12
     config.font = wezterm.font 'Hack Nerd Font'
 elseif triple:match('linux') then
-    -- Linux: bash como shell de login
     config.default_prog = { 'bash', '-l' }
     config.font_size = 12
     config.font = wezterm.font 'Hack Nerd Font'
 else
-    -- Otros sistemas Unix: bash como opción genérica
     config.default_prog = { 'bash', '-l' }
     config.font_size = 12
     config.font = wezterm.font 'Hack Nerd Font'
 end
 
-config.color_scheme = 'Tokyo Night Storm'
+config.color_scheme = 'Slate'
 
 config.window_decorations = 'TITLE | RESIZE'
--- Fondo de la ventana semitransparente (0.9 = 90 % opaco)
 config.window_background_opacity = 0.95
 config.use_fancy_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = false

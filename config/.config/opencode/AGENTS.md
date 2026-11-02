@@ -42,7 +42,8 @@ Responde siempre en español (es) salvo que el usuario indique lo contrario.
 ## Skills disponibles
 - `synchronize-subtitles`: re-sincroniza un `.srt` local contra el vídeo de la misma carpeta usando `ffsubsync`, lo convierte a UTF-8 con BOM y lo renombra siempre a `<video>.es.srt`.
 - `extract-subtitles`: extrae UNA pista española `subrip` incrustada en el vídeo, con prioridad estricta español latino > español neutro > español; si no hay ninguna elegible, no extrae nada y avisa. Copia directa con ffmpeg, normaliza el resultado a UTF-8 con BOM y siempre lo nombra `<video>.es.srt`. No extrae inglés ni convierte otros formatos.
-- `generate-api-requests`: genera una colección Bruno desde las rutas de un proyecto y la guarda en `docs/api/<project-name>/`, con `opencollection.yml` y un fichero `.yml` por endpoint.
+- `generate-api-requests`: genera una colección Bruno desde las rutas de un proyecto y la guarda en `docs/request/<project-name>/`, con `opencollection.yml` y un fichero `.yml` por endpoint.
+- `mtg-sideboard-analysis`: analiza un mazo desde `.opencode/sideboard-input.md`, investiga arquetipos y enfrentamientos en `mtgdecks.net` y genera un sideboard competitivo de 15 cartas con guías de sideboard.
 - `customize-opencode`: skill **built-in** de opencode para editar o crear su propia configuración (opencode.json, AGENTS.md, skills, plugins, MCP, reglas de permisos). No requiere instalación, ya está disponible.
 
 ## Creación de nuevas skills

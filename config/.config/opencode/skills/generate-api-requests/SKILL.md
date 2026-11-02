@@ -7,7 +7,7 @@ description: Generate a Bruno collection (opencollection.yml + .yml requests) fr
 
 - Scans the current project to auto-detect the backend framework (Express, FastAPI, ASP.NET Core, Gin, Django, Spring Boot, etc.)
 - Parses all route definitions from controllers, routers, decorators, attributes, or annotations
-- Generates a Bruno collection under `docs/api/` with an `opencollection.yml` root and individual `.yml` request files
+- Generates a Bruno collection under `docs/request/` with an `opencollection.yml` root and individual `.yml` request files
 
 ## How it works
 
@@ -41,7 +41,7 @@ Rules
 | `PUT /users/:id`           | Update user by id  |
 | `DELETE /users/:userId`    | Delete user by id   |
 | `GET /products/:id/reviews`| Get reviews by product id |
-4. **Generate Bruno collection**: Create `docs/api/{project-name}/` with:
+4. **Generate Bruno collection**: Create `docs/request/{project-name}/` with:
    - `opencollection.yml` — collection root config
    - `{endpoint-name}.yml` — one file per endpoint with the request definition
 
@@ -79,7 +79,7 @@ settings:
 ```
 {project-root}/
 └── docs/
-    └── api/
+    └── request/
         └── {project-name}/
             ├── opencollection.yml    # Collection metadata
             ├── Get ping.yml          # One .yml per endpoint
@@ -89,4 +89,4 @@ settings:
 
 ## When to use
 
-Use this when you need to quickly bootstrap or update a Bruno collection from existing API route definitions in a project. Open the generated `docs/api/{project-name}/` directory in Bruno.
+Use this when you need to quickly bootstrap or update a Bruno collection from existing API route definitions in a project. Open the generated `docs/request/{project-name}/` directory in Bruno.
